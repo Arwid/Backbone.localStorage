@@ -67,6 +67,86 @@ _.extend(Store.prototype, {
         });
         this.save();
         return model;
+    },
+
+    // Clear **localStorage**
+    clear: function() {
+        //localStorage.clear(); //removes all storage
+        localStorage.removeItem(this.name);
+        _.each(this.records,$.proxy(function(todo) {
+          localStorage.removeItem(this.name + "-" + todo.id);
+        },this));
+        this.records = [];
+    },
+
+    // Retrieve from the database into *localStorage*.
+    loadFromDB: function(url, success, error) {
+        Backbone.sync = Backbone.syncLocal;
+        // setup response handlers
+        var lfSuccess = $.proxy(function(records, asuccess, response){
+          this.clear();
+          var store = _.pluck(records, "id").join(",");
+          localStorage.setItem(this.name, store);
+          $(records).each($.proxy(function(index, item) {
+              localStorage.setItem(this.name + "-" + item.id, JSON.stringify(item));
+          },this));
+          this.records = (store && store.split(",")) || [];
+          success && success(records, asuccess, response);
+        },this);
+        var lfError = $.proxy(function(response, error, message) {
+            error && error(response, error, message);
+        },
+        this);
+        // Compile JSON-request options.
+        var params = {
+            url: url,
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success: lfSuccess,
+            error: lfError
+        };
+        // Make the request.
+        $.ajax(params);
+    },
+    
+    // Saves all of it to the server
+    saveToDB: function(url, success, error) {
+      
+      var records = this.findAll();
+      var data = JSON.stringify(records);
+      
+      // setup response handlers
+      var lfSuccess = $.proxy(function(records, asuccess, response){
+        this.clear();
+        // update todos to use new server provided ids
+        $(records).each($.proxy(function(index, item){
+          var todo = Todos.get(item.from_id);
+          todo.set({
+            id: item.id
+          });
+          this.update(todo);
+          },this));
+      },this);
+      var lfError = $.proxy(function(response, error, message) {
+        error && error(response, error, message);
+      },
+      this);
+      
+      // Compile JSON-request options.
+      var params = {
+          url: url,
+          type: 'PUT',
+          contentType: 'application/json',
+          data: data,
+          dataType: 'json',
+          processData: false,
+          success: lfSuccess,
+          error: lfError
+      };
+      // Make the request.
+      $.ajax(params);
     }
 
 });

@@ -1,3 +1,14 @@
+# Additions in this fork
+
+This adapter is now unobstructive which means it is no longer a drop in replacement. You have to include the following line in your code:
+
+    Backbone.sync = Backbone.syncLocal;
+
+This adapter also includes the ability to save to and from the database so we have offline with online synchronization. For example, after creating your collection:
+
+     SomeCollection.localStorage.loadFromDB(SomeCollection.url) // can optionally include success and error handlers
+     SomeCollection.localStorage.saveToDB(SomeCollection.url) // can optionally include success and error handlers
+
 # Backbone.localStorage
 
 Quite simply a localStorage adapter for Backbone. It's a drop-in replacement for Backbone.Sync() to handle saving to a localStorage database.

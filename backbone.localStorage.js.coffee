@@ -1,6 +1,6 @@
 ###!
 Backbone localStorage Adapter v1.0
-https://github.com/Arwid/Backbone.localStorage/tree/coffeescript
+https://github.com/Arwid/Backbone.localStorage
 ###
 
 ###

@@ -1,0 +1,5 @@
+#!/bin/bash
+coffee -c .
+mv backbone.localStorage.js.js backbone.localStorage.js
+java -jar ../tools/yuicompressor-2.4.5.jar backbone.localStorage.js -o backbone.localStorage.min.js
+echo "successfully create .js and .min.js"

@@ -8,7 +8,7 @@
   Dependencies: Underscore.js
   * Backbone.js is not a hard dependency
   */
-  var _CRUD_Sync, _S4, _guid, _guid_couch;
+  var _CRUD_Sync, __S4, _guid, _guid_couch;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   window.LocalStore = (function() {
     var modelIdAttribute;
@@ -116,14 +116,14 @@
       return options.error("Record not found");
     }
   };
-  _S4 = function() {
+  __S4 = function() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   };
   _guid_couch = function() {
-    return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
+    return _S4() + _S4() + "-" + _S4() + "-" + _S4() + "-" + _S4() + "-" + _S4() + _S4() + _S4();
   };
   _guid = function() {
-    return S4() + S4() + S4() + S4() + S4() + S4();
+    return _S4() + _S4() + _S4() + _S4() + _S4() + _S4();
   };
   window.Store = LocalStore;
 }).call(this);
